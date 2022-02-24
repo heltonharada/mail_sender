@@ -25,6 +25,7 @@ func NewMailSender() *MailSender {
 	return &MailSender{}
 }
 
+// func (ms *MailSender) Send(emailChan chan Email, workerId int) error {
 func (ms *MailSender) Send(emailChan chan Email) error {
 	m := gomail.NewMessage()
 	m.SetHeader("From", ms.From)
@@ -33,8 +34,10 @@ func (ms *MailSender) Send(emailChan chan Email) error {
 		m.SetBody("text/html", ec.Body)
 		for _, to := range ec.Emails {
 			m.SetHeader("To", to)
+			// fmt.Println("to: ", to, "workerId: ", workerId)
 			if err := ms.Dailer.DialAndSend(m); err != nil {
 				fmt.Println(err)
+				panic(err)
 			}
 		}
 	}
